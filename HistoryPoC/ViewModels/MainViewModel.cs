@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Aggregation;
+using ReactiveUI;
 
 namespace HistoryPoC.ViewModels;
 
@@ -26,12 +26,12 @@ public class MainViewModel : ViewModelBase
         sourceCache.AddOrUpdate(items);
 
         sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5)).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
-        
+
 
         sourceCache
             .Connect()
             .Group(model => model.GroupId)
-            .Transform(g => (TransactionItem) new TransactionGroup(g))
+            .Transform(g => (TransactionItem)new TransactionGroup(g))
             .DisposeMany()
             .Bind(out ReadOnlyObservableCollection<TransactionItem> collection)
             .Subscribe();
@@ -42,15 +42,26 @@ public class MainViewModel : ViewModelBase
     public ReadOnlyObservableCollection<TransactionItem> Items { get; }
 }
 
-public abstract class TransactionItem
+public abstract class TransactionItem : ViewModelBase
 {
+    private readonly ObservableAsPropertyHelper<int> amount;
     public ReadOnlyObservableCollection<TransactionItem> Children { get; protected set; }
     public string Name { get; set; }
+
+    public TransactionItem(IObservable<int> observableAmount)
+    {
+        amount = observableAmount.ToProperty(this, x => x.Amount, scheduler: RxApp.MainThreadScheduler);
+    }
+
+    public int Amount => amount.Value;
 }
 
 public class TransactionGroup : TransactionItem
 {
-    public TransactionGroup(IGroup<TransactionModel, int, int> group)
+    public TransactionGroup(IGroup<TransactionModel, int, int> group) : base(group.Cache.Connect()
+        .TransformOnObservable(x => x.Amount)
+        .ForAggregation()
+        .Sum(i => i))
     {
         group.Cache.Connect()
             .Transform(x => (TransactionItem)new SingleTransactionItem(x))
@@ -63,7 +74,7 @@ public class TransactionGroup : TransactionItem
 
 public class SingleTransactionItem : TransactionItem
 {
-    public SingleTransactionItem(TransactionModel transactionModel) : base()
+    public SingleTransactionItem(TransactionModel transactionModel) : base(transactionModel.Amount)
     {
         Name = transactionModel.Name;
     }
@@ -77,9 +88,10 @@ public class TransactionModel : ViewModelBase
         Id = id;
         ParentId = parentId;
     }
-    
+
     public string Name { get; }
     public int Id { get; }
     public int? ParentId { get; set; }
     public int GroupId => ParentId ?? -Id;
+    public IObservable<int> Amount { get; } = Observable.Return(10);
 }

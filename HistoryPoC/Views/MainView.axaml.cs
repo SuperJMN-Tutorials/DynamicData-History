@@ -33,7 +33,8 @@ public partial class MainView : UserControl
         {
             Columns =
             {
-                new HierarchicalExpanderColumn<TransactionItem>(new TextColumn<TransactionItem,string>("Name", x => x.Name), x => x.Children)
+                new HierarchicalExpanderColumn<TransactionItem>(new TextColumn<TransactionItem,string>("Name", x => x.Name), x => x.Children),
+                new TextColumn<TransactionItem,int>("Amount", x => x.Amount)
             }
         };
     }
