@@ -18,11 +18,17 @@ public class TransactionModel : ViewModelBase
     public int Id { get; }
     
     public int? ParentId { get; set; }
-    
-    public int GroupId => ParentId ?? -Id;
-    
-    public IObservable<int> Amount { get; } = Observable.Return(10);
+
+    public int Amount { get; } = 10;
     
     [Reactive]
     public TransactionStatus Status { get; set; }
+}
+
+public static class Mixin
+{
+    public static int GroupId(this TransactionModel model)
+    {
+        return model.ParentId ?? -model.Id;
+    }
 }

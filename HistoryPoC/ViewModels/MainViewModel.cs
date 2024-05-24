@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive.Linq;
 using Avalonia.Controls.Selection;
 using Bogus;
@@ -13,6 +12,7 @@ public class MainViewModel : ViewModelBase
 {
     public string Greeting => "Welcome to Avalonia!";
 
+    public TreeDataGridRowSelectionModel<TransactionNode> Selection { get; set; }
     public MainViewModel()
     {
         var items = new TransactionModel[]
@@ -23,7 +23,7 @@ public class MainViewModel : ViewModelBase
             new TransactionModel("Two", 4, 1),
             new TransactionModel("Three", 5, 1)
         };
-
+        
         var sourceCache = new SourceCache<TransactionModel, int>(x => x.Id);
         sourceCache.AddOrUpdate(items);
 
@@ -42,14 +42,14 @@ public class MainViewModel : ViewModelBase
 
         sourceCache
             .Connect()
-            .Group(model => model.GroupId)
-            .Transform(g => (TransactionItem)new TransactionGroup(g))
+            .Group(model => model.GroupId())
+            .Transform(g => (TransactionNode)new TransactionGroup(g))
             .DisposeMany()
-            .Bind(out ReadOnlyObservableCollection<TransactionItem> collection)
+            .Bind(out ReadOnlyObservableCollection<TransactionNode> collection)
             .Subscribe();
 
         Items = collection;
     }
 
-    public ReadOnlyObservableCollection<TransactionItem> Items { get; }
+    public ReadOnlyObservableCollection<TransactionNode> Items { get; }
 }
