@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
+using Avalonia.Controls.Selection;
+using Bogus;
 using DynamicData;
-using DynamicData.Aggregation;
 using ReactiveUI;
 
 namespace HistoryPoC.ViewModels;
@@ -25,8 +27,18 @@ public class MainViewModel : ViewModelBase
         var sourceCache = new SourceCache<TransactionModel, int>(x => x.Id);
         sourceCache.AddOrUpdate(items);
 
-        sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5)).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
+        //sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
 
+        var faker = new Faker();
+
+        Observable.Interval(TimeSpan.FromSeconds(3), RxApp.MainThreadScheduler)
+            .Subscribe(l =>
+            {
+                var randomItem = faker.PickRandom(sourceCache.Items);
+                var value = faker.PickRandom(Enum.GetValues<TransactionStatus>());
+                //randomItem.Status = faker.PickRandom(value);
+                randomItem.Status = TransactionStatus.Unconfirmed;
+            });
 
         sourceCache
             .Connect()
@@ -40,58 +52,4 @@ public class MainViewModel : ViewModelBase
     }
 
     public ReadOnlyObservableCollection<TransactionItem> Items { get; }
-}
-
-public abstract class TransactionItem : ViewModelBase
-{
-    private readonly ObservableAsPropertyHelper<int> amount;
-    public ReadOnlyObservableCollection<TransactionItem> Children { get; protected set; }
-    public string Name { get; set; }
-
-    public TransactionItem(IObservable<int> observableAmount)
-    {
-        amount = observableAmount.ToProperty(this, x => x.Amount, scheduler: RxApp.MainThreadScheduler);
-    }
-
-    public int Amount => amount.Value;
-}
-
-public class TransactionGroup : TransactionItem
-{
-    public TransactionGroup(IGroup<TransactionModel, int, int> group) : base(group.Cache.Connect()
-        .TransformOnObservable(x => x.Amount)
-        .ForAggregation()
-        .Sum(i => i))
-    {
-        group.Cache.Connect()
-            .Transform(x => (TransactionItem)new SingleTransactionItem(x))
-            .Bind(out var children)
-            .Subscribe();
-        Children = children;
-        Name = group.Key.ToString();
-    }
-}
-
-public class SingleTransactionItem : TransactionItem
-{
-    public SingleTransactionItem(TransactionModel transactionModel) : base(transactionModel.Amount)
-    {
-        Name = transactionModel.Name;
-    }
-}
-
-public class TransactionModel : ViewModelBase
-{
-    public TransactionModel(string name, int id, int? parentId)
-    {
-        Name = name;
-        Id = id;
-        ParentId = parentId;
-    }
-
-    public string Name { get; }
-    public int Id { get; }
-    public int? ParentId { get; set; }
-    public int GroupId => ParentId ?? -Id;
-    public IObservable<int> Amount { get; } = Observable.Return(10);
 }
