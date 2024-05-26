@@ -22,4 +22,6 @@ public class SingleTransactionNode : TransactionNode
     public sealed override IObservable<int> Amount { get; }
     public override string Status => status.Value;
     public override int AmountProperty => amount.Value;
+
+    public override IObservable<DateTimeOffset> Date => Observable.Return(DateTimeOffset.Now);
 }

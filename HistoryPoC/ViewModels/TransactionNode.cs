@@ -11,4 +11,5 @@ public abstract class TransactionNode : ViewModelBase
     public abstract IObservable<int> Amount { get; }
     public abstract string Status { get; }
     public abstract int AmountProperty { get; }
+    public abstract IObservable<DateTimeOffset> Date { get; }
 }

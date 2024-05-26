@@ -27,7 +27,7 @@ public class MainViewModel : ViewModelBase
         var sourceCache = new SourceCache<TransactionModel, int>(x => x.Id);
         sourceCache.AddOrUpdate(items);
 
-        //sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
+        sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
 
         var faker = new Faker();
 
