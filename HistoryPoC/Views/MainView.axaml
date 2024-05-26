@@ -11,11 +11,11 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <DataGrid x:Name="TreeDataGrid" ItemsSource="{Binding Items}">
+  <DataGrid ItemsSource="{Binding Items}">
       <DataGrid.Columns>
           <DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Amount^}" />
           <DataGridTextColumn Header="Date" CanUserSort="True" SortMemberPath="Value" Binding="{Binding Date^}" />
-          <DataGridTextColumn Header="Status" CanUserSort="True" Binding="{Binding Status^}" />
+          <DataGridCheckBoxColumn Header="Confirmed" CanUserSort="True" Binding="{Binding IsConfirmed^}" />
       </DataGrid.Columns>
   </DataGrid>
 

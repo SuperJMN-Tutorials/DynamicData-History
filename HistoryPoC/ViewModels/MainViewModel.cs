@@ -33,7 +33,7 @@ public class MainViewModel : ViewModelBase
                 Date = DateTimeOffset.UtcNow
             }
         }));
-
+        
         var faker = new Faker();
 
         Observable.Interval(TimeSpan.FromSeconds(3), RxApp.MainThreadScheduler)
@@ -42,7 +42,7 @@ public class MainViewModel : ViewModelBase
                 var randomItem = faker.PickRandom(sourceCache.Items);
                 var value = faker.PickRandom(Enum.GetValues<TransactionStatus>());
                 //randomItem.Status = faker.PickRandom(value);
-                randomItem.Status = TransactionStatus.Unconfirmed;
+                randomItem.IsConfirmed = true;
             });
 
         sourceCache

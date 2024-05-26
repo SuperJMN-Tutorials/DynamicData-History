@@ -12,6 +12,7 @@ public abstract class TransactionNode : ViewModelBase
     public abstract IObservable<int> Amount { get; }
     public abstract IObservable<TransactionStatus> Status { get; }
     public abstract IObservable<HumanizedDateTimeOffset> Date { get; }
+    public abstract IObservable<bool?> IsConfirmed { get; }
 }
 
 public record HumanizedDateTimeOffset

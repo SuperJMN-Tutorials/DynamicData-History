@@ -29,10 +29,6 @@ public class TransactionGroup : TransactionNode, IDisposable
 
         Name = group.Key.ToString();
 
-        var unconfirmedCount = childrenChangeSet
-            .AutoRefreshOnObservable(x => x.Status)
-            .FilterOnObservable(x => x.Status.Select(transactionStatus => transactionStatus == TransactionStatus.Unconfirmed))
-            .Count();
 
         var sum = childrenChangeSet
             .TransformOnObservable(x => x.Amount)
@@ -45,10 +41,28 @@ public class TransactionGroup : TransactionNode, IDisposable
             .Maximum(i => i)
             .Select(i => new HumanizedDateTimeOffset(new DateTimeOffset(i, TimeSpan.Zero)));
 
-        var hasAny = unconfirmedCount
-            .Select(n => n > 0);
+        var childrenCount = childrenChangeSet.Count();
 
-        Status = hasAny.Select(b => b ? TransactionStatus.Unconfirmed : TransactionStatus.Confirmed);
+        var confirmedCount = childrenChangeSet
+            .AutoRefreshOnObservable(x => x.IsConfirmed)
+            .FilterOnObservable(x => x.IsConfirmed.Select(b => b == true))
+            .Count()
+            .CombineLatest(childrenCount, (confirmed, total) =>
+            {
+                if (confirmed == total)
+                {
+                    return true;
+                }
+
+                if (confirmed == 0)
+                {
+                    return false;
+                }
+                
+                return (bool?)null;
+            });
+
+        IsConfirmed = confirmedCount;
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;
@@ -58,6 +72,8 @@ public class TransactionGroup : TransactionNode, IDisposable
     public override IObservable<TransactionStatus> Status { get; }
 
     public override IObservable<HumanizedDateTimeOffset> Date { get; }
+
+    public override IObservable<bool?> IsConfirmed { get; }
 
     public void Dispose()
     {
