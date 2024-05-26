@@ -23,6 +23,8 @@ public class TransactionModel : ViewModelBase
     
     [Reactive]
     public TransactionStatus Status { get; set; }
+
+    public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
 }
 
 public static class Mixin

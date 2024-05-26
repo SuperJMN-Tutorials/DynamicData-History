@@ -17,17 +17,22 @@ public class MainViewModel : ViewModelBase
     {
         var items = new TransactionModel[]
         {
-            new TransactionModel("Single", 1, null),
-            new TransactionModel("Single", 2, null),
-            new TransactionModel("Single", 3, null),
-            new TransactionModel("Two", 4, 1),
-            new TransactionModel("Three", 5, 1)
+            new TransactionModel("Single", 2, null){ Date = new DateTimeOffset(2024, 5, 12, 1, 5, 33, 2, TimeSpan.Zero)},
+            new TransactionModel("Single", 1, null) { Date = new DateTimeOffset(2024, 4, 1, 12, 44, 2, TimeSpan.Zero)},
+            new TransactionModel("Two", 4, 1){ Date = new DateTimeOffset(2024, 5, 1, 23, 50, 2, TimeSpan.Zero)},
+            new TransactionModel("Three", 5, 1) { Date = new DateTimeOffset(2024, 5, 25, 22, 15, 2, TimeSpan.Zero)},
+            new TransactionModel("Single", 3, null) { Date = new DateTimeOffset(2024, 5, 12, 1, 22, 21, 2, TimeSpan.Zero)},
         };
-        
         var sourceCache = new SourceCache<TransactionModel, int>(x => x.Id);
         sourceCache.AddOrUpdate(items);
 
-        sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[] { new TransactionModel("New", 6 + (int)n, 1) }));
+        sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[]
+        {
+            new TransactionModel("New", 6 + (int)n, 1)
+            {
+                Date = DateTimeOffset.UtcNow
+            }
+        }));
 
         var faker = new Faker();
 

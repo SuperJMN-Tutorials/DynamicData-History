@@ -20,20 +20,19 @@ public class TransactionGroup : TransactionNode, IDisposable
         var changeSet = group.Cache.Connect();
 
         var childrenChangeSet = changeSet
-            .Transform(x => (TransactionNode) new SingleTransactionNode(x));
-        
+            .Transform(x => (TransactionNode)new SingleTransactionNode(x));
+
         childrenChangeSet
             .Bind(out children)
             .Subscribe()
             .DisposeWith(disposables);
-        
+
         Name = group.Key.ToString();
 
         var unconfirmedCount = childrenChangeSet
-            .AutoRefresh()
-            .Filter(x => x.Status == TransactionStatus.Unconfirmed, suppressEmptyChangeSets: false)
+            .AutoRefreshOnObservable(x => x.Status)
+            .FilterOnObservable(x => x.Status.Select(transactionStatus => transactionStatus == TransactionStatus.Unconfirmed))
             .Count();
-
 
         var sum = childrenChangeSet
             .TransformOnObservable(x => x.Amount)
@@ -42,27 +41,23 @@ public class TransactionGroup : TransactionNode, IDisposable
         Amount = sum;
 
         Date = childrenChangeSet
-            .TransformOnObservable(x => x.Date.Select(y => y.Ticks))
+            .TransformOnObservable(x => x.Date.Select(y => y.Value.Ticks))
             .Maximum(i => i)
-            .Select(i => new DateTimeOffset(i, TimeSpan.Zero));
-        
-        var hasAny =  unconfirmedCount
+            .Select(i => new HumanizedDateTimeOffset(new DateTimeOffset(i, TimeSpan.Zero)));
+
+        var hasAny = unconfirmedCount
             .Select(n => n > 0);
 
-        status = hasAny.Select(b => b ? TransactionStatus.Unconfirmed : TransactionStatus.Confirmed)
-            .ToProperty(this, x => x.Status).DisposeWith(disposables);
-        amount = Amount.ToProperty(this, x => x.AmountProperty);
+        Status = hasAny.Select(b => b ? TransactionStatus.Unconfirmed : TransactionStatus.Confirmed);
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;
 
     public sealed override IObservable<int> Amount { get; }
 
-    public override TransactionStatus Status => status.Value;
+    public override IObservable<TransactionStatus> Status { get; }
 
-    public override int AmountProperty => amount.Value;
-
-    public override IObservable<DateTimeOffset> Date { get; }
+    public override IObservable<HumanizedDateTimeOffset> Date { get; }
 
     public void Dispose()
     {

@@ -8,20 +8,17 @@ namespace HistoryPoC.ViewModels;
 public class SingleTransactionNode : TransactionNode
 {
     private readonly ObservableAsPropertyHelper<TransactionStatus> status;
-    private readonly ObservableAsPropertyHelper<int> amount;
 
     public SingleTransactionNode(TransactionModel transactionModel)
     {
         Name = transactionModel.Name;
-        status = transactionModel.WhenAnyValue(x => x.Status).ToProperty(this, x => x.Status);
+        Status = transactionModel.WhenAnyValue(x => x.Status);
+        Date = transactionModel.WhenAnyValue(x => x.Date).Select(offset => new HumanizedDateTimeOffset(offset));
         Amount = Observable.Return(transactionModel.Amount);
-        amount = Amount.ToProperty(this, x => x.AmountProperty);
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => new(new ObservableCollection<TransactionNode>());
     public sealed override IObservable<int> Amount { get; }
-    public override TransactionStatus Status => status.Value;
-    public override int AmountProperty => amount.Value;
-
-    public override IObservable<DateTimeOffset> Date => Observable.Return(DateTimeOffset.Now);
+    public override IObservable<TransactionStatus> Status { get; }
+    public override IObservable<HumanizedDateTimeOffset> Date { get; }
 }
