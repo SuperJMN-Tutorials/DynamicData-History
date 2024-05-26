@@ -13,9 +13,9 @@
 
   <DataGrid x:Name="TreeDataGrid" ItemsSource="{Binding Items}">
       <DataGrid.Columns>
-          <DataGridTextColumn Header="Amount" Binding="{Binding Amount^}" />
-          <DataGridTextColumn Header="Date" Binding="{Binding Date^}" />
-          <DataGridTextColumn Header="Amount" Binding="{Binding Status}" />
+          <DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Amount^}" />
+          <DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding Date^}" />
+          <DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Status}" />
       </DataGrid.Columns>
   </DataGrid>
 
