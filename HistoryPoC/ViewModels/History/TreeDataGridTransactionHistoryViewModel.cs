@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Reactive.Linq;
+using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using DynamicData;
 using HistoryPoC.Helpers;
@@ -11,12 +13,18 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
 {
     public TreeDataGridTransactionHistoryViewModel(ISourceCache<TransactionModel, int> sourceCache) : base(sourceCache)
     {
+        var hierarchicalExpanderColumn = new HierarchicalExpanderColumn<TransactionNode>(new TextColumn<TransactionNode, string>("Name", x => x.Name), x => x.Children);
+
+        var amountColumn = new TemplateColumn<TransactionNode>("Amount", new ObservableTemplate<TransactionNode, int>(x => x.Amount));
+        var dateColumn = new TemplateColumn<TransactionNode>("Date", new ObservableTemplate<TransactionNode, HumanizedDateTimeOffset>(x => x.Date));
+        
         var hierarchicalTreeDataGridSource = new HierarchicalTreeDataGridSource<TransactionNode>(Items)
         {
             Columns =
             {
-                new HierarchicalExpanderColumn<TransactionNode>(new TextColumn<TransactionNode, string>("Name", x => x.Name), x => x.Children),
-                new TemplateColumn<TransactionNode>("Amount", new ObservableTemplate<TransactionNode, int>(x => x.Amount))
+                hierarchicalExpanderColumn,
+                dateColumn,
+                amountColumn
             },
         };
 

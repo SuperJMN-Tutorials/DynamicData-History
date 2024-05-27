@@ -22,8 +22,9 @@ public class ObservableTemplate<T, TOutput> : IDataTemplate
 
         return new ContentPresenter()
         {
+            Margin = new Thickness(4),
             [!ContentControl.ContentProperty] = binding,
-            HorizontalContentAlignment = HorizontalAlignment.Center,
+            HorizontalContentAlignment = HorizontalAlignment.Left,
         };
     }
 
