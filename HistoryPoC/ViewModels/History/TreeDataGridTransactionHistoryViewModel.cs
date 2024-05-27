@@ -3,8 +3,9 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using DynamicData;
 using HistoryPoC.Helpers;
 using HistoryPoC.Model;
+using HistoryPoC.ViewModels.History.Nodes;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.ViewModels.History;
 
 public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewModel
 {

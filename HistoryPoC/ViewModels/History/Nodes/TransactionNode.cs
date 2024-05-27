@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using HistoryPoC.Helpers;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.ViewModels.History.Nodes;
 
 public abstract class TransactionNode : ViewModelBase
 {

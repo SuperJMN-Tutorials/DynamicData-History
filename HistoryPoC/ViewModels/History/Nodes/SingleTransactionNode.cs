@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using HistoryPoC.Helpers;
 using HistoryPoC.Model;
 using ReactiveUI;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.ViewModels.History.Nodes;
 
 public class SingleTransactionNode : TransactionNode
 {
@@ -14,7 +15,7 @@ public class SingleTransactionNode : TransactionNode
         Name = transactionModel.Name;
         Date = transactionModel.WhenAnyValue(x => x.Date).Select(offset => new HumanizedDateTimeOffset(offset));
         Amount = Observable.Return(transactionModel.Amount);
-        IsConfirmed = transactionModel.WhenAnyValue(x => x.IsConfirmed, b =>(bool?)b);
+        IsConfirmed = transactionModel.WhenAnyValue(x => x.IsConfirmed, b => (bool?)b);
         Labels = Observable.Return(transactionModel.Labels);
     }
 

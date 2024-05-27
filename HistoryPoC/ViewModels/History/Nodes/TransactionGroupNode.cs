@@ -5,18 +5,19 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Aggregation;
+using HistoryPoC.Helpers;
 using HistoryPoC.Model;
 using ReactiveUI;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.ViewModels.History.Nodes;
 
-public class TransactionGroup : TransactionNode, IDisposable
+public class TransactionGroupNode : TransactionNode, IDisposable
 {
     private readonly CompositeDisposable disposables = new();
     private readonly ReadOnlyObservableCollection<TransactionNode> children;
     private readonly ObservableAsPropertyHelper<int> amount;
 
-    public TransactionGroup(IGroup<TransactionModel, int, int> group)
+    public TransactionGroupNode(IGroup<TransactionModel, int, int> group)
     {
         var changeSet = group.Cache.Connect();
 
@@ -59,12 +60,12 @@ public class TransactionGroup : TransactionNode, IDisposable
                 {
                     return false;
                 }
-                
+
                 return (bool?)null;
             });
 
         IsConfirmed = confirmedCount;
-        Labels = Observable.Return(new List<string>(){ "Sample", "Label"});
+        Labels = Observable.Return(new List<string>() { "Sample", "Label" });
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;

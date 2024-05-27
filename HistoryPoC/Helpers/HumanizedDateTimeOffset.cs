@@ -2,7 +2,7 @@
 using System.Globalization;
 using Humanizer;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.Helpers;
 
 public record HumanizedDateTimeOffset
 {

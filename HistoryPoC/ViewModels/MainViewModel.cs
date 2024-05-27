@@ -1,6 +1,7 @@
 ﻿using System;
 using DynamicData;
 using HistoryPoC.Model;
+using HistoryPoC.ViewModels.History;
 
 namespace HistoryPoC.ViewModels;
 

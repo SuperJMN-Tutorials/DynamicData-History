@@ -1,6 +1,6 @@
 ﻿using HistoryPoC.Model;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.Helpers;
 
 public static class Mixin
 {

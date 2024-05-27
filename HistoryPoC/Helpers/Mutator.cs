@@ -6,7 +6,7 @@ using DynamicData;
 using HistoryPoC.Model;
 using ReactiveUI;
 
-namespace HistoryPoC.ViewModels;
+namespace HistoryPoC.Helpers;
 
 public class Mutator
 {
