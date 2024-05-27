@@ -20,8 +20,8 @@ public class MainViewModel : ViewModelBase
         var sourceCache = new SourceCache<TransactionModel, int>(x => x.Id);
         sourceCache.AddOrUpdate(items);
         
-        TransactionHistoryViewModel = new TransactionHistoryViewModel(sourceCache);
+        HistoryViewModel = new TransactionHistoryViewModel(sourceCache);
     }
 
-    public TransactionHistoryViewModel TransactionHistoryViewModel { get; }
+    public TransactionHistoryViewModel HistoryViewModel { get; }
 }

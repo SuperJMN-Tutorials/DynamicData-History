@@ -30,4 +30,10 @@
   <ItemGroup>
     <Folder Include="Converters\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\DataGridHistoryView.axaml.cs">
+      <DependentUpon>DataGridHistoryView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

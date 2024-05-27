@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:HistoryPoC.ViewModels"
+             xmlns:views="clr-namespace:HistoryPoC.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HistoryPoC.Views.MainView"
              x:DataType="vm:MainViewModel"
@@ -11,33 +12,6 @@
 		<vm:MainViewModel />
 	</Design.DataContext>
 
-	<DataGrid ItemsSource="{Binding TransactionHistoryViewModel.Items}" >
-		<DataGrid.Columns>
-			<DataGridCheckBoxColumn Header="Confirmed" CanUserSort="True" Binding="{Binding IsConfirmed^}" />
-			<DataGridTextColumn Header="Date" CanUserSort="True" SortMemberPath="Value" Binding="{Binding Date^}" />
-			<DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Amount^}" />
-			<DataGridTemplateColumn Header="Labels" Width="*">
-				<DataGridTemplateColumn.CellTemplate>
-					<DataTemplate x:DataType="vm:TransactionNode" DataType="vm:TransactionNode">
-						<ItemsControl ItemsSource="{Binding Labels^}">
-                            <ItemsControl.ItemTemplate>
-							    <DataTemplate>
-									<Border BorderBrush="Black"  BorderThickness="1" Padding="4" CornerRadius="6">
-										<TextBlock VerticalAlignment="Center" Text="{Binding}" />
-                                    </Border>
-                                </DataTemplate>	
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<StackPanel Margin="8" Orientation="Horizontal" Spacing="6"></StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
-			<DataGridTextColumn Header="Actions" />
-        </DataGrid.Columns>
-	</DataGrid>
+    <views:DataGridHistoryView DataContext="{Binding HistoryViewModel}" />
 
 </UserControl>
