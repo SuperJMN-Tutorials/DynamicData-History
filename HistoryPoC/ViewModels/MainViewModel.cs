@@ -1,5 +1,6 @@
 ﻿using System;
 using DynamicData;
+using HistoryPoC.Model;
 
 namespace HistoryPoC.ViewModels;
 
@@ -21,7 +22,10 @@ public class MainViewModel : ViewModelBase
         sourceCache.AddOrUpdate(items);
         
         HistoryViewModel = new TransactionHistoryViewModel(sourceCache);
+        TreeDataGridHistoryViewModel = new TreeDataGridTransactionHistoryViewModel(sourceCache);
     }
+
+    public TreeDataGridTransactionHistoryViewModel TreeDataGridHistoryViewModel { get; }
 
     public TransactionHistoryViewModel HistoryViewModel { get; }
 }

@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Bogus;
 using DynamicData;
+using HistoryPoC.Model;
 using ReactiveUI;
 
 namespace HistoryPoC.ViewModels;

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using DynamicData;
+using HistoryPoC.Model;
 
 namespace HistoryPoC.ViewModels;
 

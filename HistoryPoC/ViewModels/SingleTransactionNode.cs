@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using HistoryPoC.Model;
 using ReactiveUI;
 
 namespace HistoryPoC.ViewModels;

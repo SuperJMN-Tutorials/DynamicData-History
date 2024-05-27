@@ -17,7 +17,7 @@
 			<views:DataGridHistoryView DataContext="{Binding HistoryViewModel}" />
 		</HeaderedContentControl>
         <HeaderedContentControl Header="TreeDataGrid">
-            <views:DataGridHistoryView DataContext="{Binding HistoryViewModel}" />
+            <views:TreeDataGridHistoryView DataContext="{Binding TreeDataGridHistoryViewModel}" />
         </HeaderedContentControl>
 	</UniformGrid>
 

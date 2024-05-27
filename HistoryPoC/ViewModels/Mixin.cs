@@ -1,4 +1,6 @@
-﻿namespace HistoryPoC.ViewModels;
+﻿using HistoryPoC.Model;
+
+namespace HistoryPoC.ViewModels;
 
 public static class Mixin
 {

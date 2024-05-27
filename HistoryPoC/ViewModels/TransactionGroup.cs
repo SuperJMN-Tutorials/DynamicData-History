@@ -5,13 +5,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Aggregation;
+using HistoryPoC.Model;
 using ReactiveUI;
 
 namespace HistoryPoC.ViewModels;
 
 public class TransactionGroup : TransactionNode, IDisposable
 {
-    private readonly ObservableAsPropertyHelper<TransactionStatus> status;
     private readonly CompositeDisposable disposables = new();
     private readonly ReadOnlyObservableCollection<TransactionNode> children;
     private readonly ObservableAsPropertyHelper<int> amount;
@@ -77,7 +77,6 @@ public class TransactionGroup : TransactionNode, IDisposable
 
     public void Dispose()
     {
-        status.Dispose();
         disposables.Dispose();
         amount.Dispose();
     }
