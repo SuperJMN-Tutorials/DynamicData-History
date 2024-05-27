@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -63,17 +64,16 @@ public class TransactionGroup : TransactionNode, IDisposable
             });
 
         IsConfirmed = confirmedCount;
+        Labels = Observable.Return(new List<string>(){ "Sample", "Label"});
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;
 
     public sealed override IObservable<int> Amount { get; }
 
-    public override IObservable<TransactionStatus> Status { get; }
-
     public override IObservable<HumanizedDateTimeOffset> Date { get; }
-
     public override IObservable<bool?> IsConfirmed { get; }
+    public override IObservable<IEnumerable<string>> Labels { get; }
 
     public void Dispose()
     {

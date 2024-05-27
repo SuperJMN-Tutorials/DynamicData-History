@@ -7,16 +7,37 @@
              x:Class="HistoryPoC.Views.MainView"
              x:DataType="vm:MainViewModel"
              x:Name="UserControl">
-  <Design.DataContext>
-    <vm:MainViewModel />
-  </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainViewModel />
+	</Design.DataContext>
 
-  <DataGrid ItemsSource="{Binding Items}">
-      <DataGrid.Columns>
-          <DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Amount^}" />
-          <DataGridTextColumn Header="Date" CanUserSort="True" SortMemberPath="Value" Binding="{Binding Date^}" />
-          <DataGridCheckBoxColumn Header="Confirmed" CanUserSort="True" Binding="{Binding IsConfirmed^}" />
-      </DataGrid.Columns>
-  </DataGrid>
+	<DataGrid ItemsSource="{Binding TransactionHistoryViewModel.Items}" >
+		<DataGrid.Columns>
+			<DataGridCheckBoxColumn Header="Confirmed" CanUserSort="True" Binding="{Binding IsConfirmed^}" />
+			<DataGridTextColumn Header="Date" CanUserSort="True" SortMemberPath="Value" Binding="{Binding Date^}" />
+			<DataGridTextColumn Header="Amount" CanUserSort="True" Binding="{Binding Amount^}" />
+			<DataGridTemplateColumn Header="Labels" Width="*">
+				<DataGridTemplateColumn.CellTemplate>
+					<DataTemplate x:DataType="vm:TransactionNode" DataType="vm:TransactionNode">
+						<ItemsControl ItemsSource="{Binding Labels^}">
+                            <ItemsControl.ItemTemplate>
+							    <DataTemplate>
+									<Border BorderBrush="Black"  BorderThickness="1" Padding="4" CornerRadius="6">
+										<TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    </Border>
+                                </DataTemplate>	
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Margin="8" Orientation="Horizontal" Spacing="6"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </DataTemplate>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
+			<DataGridTextColumn Header="Actions" />
+        </DataGrid.Columns>
+	</DataGrid>
 
 </UserControl>

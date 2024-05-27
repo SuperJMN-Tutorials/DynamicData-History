@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reactive.Linq;
+using System.Collections.Generic;
 using ReactiveUI.Fody.Helpers;
 
 namespace HistoryPoC.ViewModels;
@@ -21,6 +21,8 @@ public class TransactionModel : ViewModelBase
 
     public int Amount { get; } = 10;
     
+    public IEnumerable<string> Labels { get; } = ["Label", "Other label"];
+    
     [Reactive]
     public TransactionStatus Status { get; set; }
 
@@ -28,12 +30,6 @@ public class TransactionModel : ViewModelBase
     
     [Reactive]
     public bool IsConfirmed { get; set; }
-}
-
-public static class Mixin
-{
-    public static int GroupId(this TransactionModel model)
-    {
-        return model.ParentId ?? -model.Id;
-    }
+    
+    
 }
