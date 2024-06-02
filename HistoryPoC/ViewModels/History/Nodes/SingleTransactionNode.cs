@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using HistoryPoC.Helpers;
 using HistoryPoC.Model;
 using ReactiveUI;
@@ -14,7 +15,7 @@ public class SingleTransactionNode : TransactionNode
     {
         Name = transactionModel.Name;
         Date = transactionModel.WhenAnyValue(x => x.Date).Select(offset => new HumanizedDateTimeOffset(offset));
-        Amount = Observable.Return(transactionModel.Amount);
+        Amount = new BehaviorSubject<int>(transactionModel.Amount);
         IsConfirmed = transactionModel.WhenAnyValue(x => x.IsConfirmed, b => (bool?)b);
         Labels = Observable.Return(transactionModel.Labels);
     }
