@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:linq="clr-namespace:System.Linq;assembly=System.Linq"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="HistoryPoC.Views.History.Columns.LabelsView" x:DataType="linq:Enumerable">
+    <ItemsControl ItemsSource="{Binding}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="system:String">
+                <Border BorderBrush="Black"  BorderThickness="1" Padding="4" CornerRadius="6">
+                    <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                </Border>
+            </DataTemplate>	
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Margin="8" Orientation="Horizontal" Spacing="6"></StackPanel>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+</UserControl>

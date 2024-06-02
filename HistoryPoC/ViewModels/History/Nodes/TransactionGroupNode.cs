@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using DynamicData;
 using DynamicData.Aggregation;
 using HistoryPoC.Helpers;
@@ -65,7 +66,7 @@ public class TransactionGroupNode : TransactionNode, IDisposable
             });
 
         IsConfirmed = confirmedCount;
-        Labels = Observable.Return(new List<string>() { "Sample", "Label" });
+        Labels = new BehaviorSubject<IEnumerable<string>>(new List<string>(){"Sample", "Value"});
     }
 
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;

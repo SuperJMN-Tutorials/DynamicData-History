@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:nodes="clr-namespace:HistoryPoC.ViewModels.History.Nodes"
              xmlns:history="clr-namespace:HistoryPoC.ViewModels.History"
+             xmlns:columns="clr-namespace:HistoryPoC.Views.History.Columns"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HistoryPoC.Views.DataGridHistoryView"
              x:DataType="history:TransactionHistoryViewModel">
@@ -15,20 +16,7 @@
             <DataGridTemplateColumn Header="Labels" Width="*">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate x:DataType="nodes:TransactionNode" DataType="nodes:TransactionNode">
-                        <ItemsControl ItemsSource="{Binding Labels^}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="Black"  BorderThickness="1" Padding="4" CornerRadius="6">
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
-                                    </Border>
-                                </DataTemplate>	
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Margin="8" Orientation="Horizontal" Spacing="6"></StackPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                       <columns:LabelsView DataContext="{Binding Labels^}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
