@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using DynamicData;
@@ -34,6 +35,14 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
         {
             view.Bind(StyledElement.DataContextProperty, node.Labels);
         }), width: GridLength.Star);
+        
+        var confirmationColumn = new TemplateColumn<TransactionNode>("Confirmed", new MyTemplate<TransactionNode, CheckBox>(node => new CheckBox()
+        {
+            VerticalAlignment = VerticalAlignment.Center
+        }, (node, view) =>
+        {
+            view.Bind(ToggleButton.IsCheckedProperty, node.IsConfirmed);
+        }));
 
         var expanderColumn = new HierarchicalExpanderColumn<TransactionNode>(blankColumn, x => x.Children);
 
@@ -44,6 +53,7 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
             Columns =
             {
                 expanderColumn,
+                confirmationColumn,
                 amountColumn,
                 dateColumn,
                 labelsColumn,
