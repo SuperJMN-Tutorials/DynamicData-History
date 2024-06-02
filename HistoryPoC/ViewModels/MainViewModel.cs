@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using DynamicData;
+using HistoryPoC.Helpers;
 using HistoryPoC.Model;
 using HistoryPoC.ViewModels.History;
 
 namespace HistoryPoC.ViewModels;
 
-public class MainViewModel : ViewModelBase
+public class MainViewModel : ViewModelBase, IDisposable
 {
+    private readonly CompositeDisposable disposable =new();
 
     public MainViewModel()
     {
@@ -24,9 +27,18 @@ public class MainViewModel : ViewModelBase
         
         HistoryViewModel = new TransactionHistoryViewModel(sourceCache);
         TreeDataGridHistoryViewModel = new TreeDataGridTransactionHistoryViewModel(sourceCache);
+        new Mutator().Mutate(sourceCache)
+            .DisposeWith(disposable);
     }
 
     public TreeDataGridTransactionHistoryViewModel TreeDataGridHistoryViewModel { get; }
 
     public TransactionHistoryViewModel HistoryViewModel { get; }
+
+    public void Dispose()
+    {
+        disposable.Dispose();
+        TreeDataGridHistoryViewModel.Dispose();
+        HistoryViewModel.Dispose();
+    }
 }
