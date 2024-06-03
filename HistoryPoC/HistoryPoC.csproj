@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Views\History\TreeDataGridHistoryView.axaml.cs">
       <DependentUpon>TreeDataGridHistoryView.axaml</DependentUpon>
     </Compile>

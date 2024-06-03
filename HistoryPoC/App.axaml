@@ -1,5 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Collections"
+             xmlns:global="clr-namespace:"
+             xmlns:converters="clr-namespace:HistoryPoC.Converters"
              x:Class="HistoryPoC.App"
              RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -9,5 +12,40 @@
 		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 		<StyleInclude Source="avares://Zafiro.Avalonia/Styles.axaml" />
+
+        <Style Selector="TreeDataGridRow" x:CompileBindings="False">
+            <Style.Resources>
+                <converters:IndentToColorConverter x:Key="IndentToBrushConverter">
+                    <converters:IndentToColorConverter.Brushes>
+                        <generic:List x:TypeArguments="IBrush">
+                            <SolidColorBrush>Transparent</SolidColorBrush>
+                            <SolidColorBrush Color="{DynamicResource SystemListLowColor}" />
+                        </generic:List>
+                    </converters:IndentToColorConverter.Brushes>
+                </converters:IndentToColorConverter>
+            </Style.Resources>
+            <Setter Property="Template">
+                <ControlTemplate TargetType="TreeDataGridRow">
+                    <Border x:Name="RowBorder"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="0">
+                        <Border.Background>
+                            <MultiBinding Converter="{StaticResource IndentToBrushConverter}">
+                                <Binding Path="." />
+                                <Binding Path="Rows" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                            </MultiBinding>
+                        </Border.Background>
+                        <TreeDataGridCellsPresenter x:Name="PART_CellsPresenter"
+                                                    ElementFactory="{TemplateBinding ElementFactory}"
+                                                    Items="{TemplateBinding Columns}"
+                                                    Rows="{TemplateBinding Rows}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
 	</Application.Styles>
+
+	
 </Application>
