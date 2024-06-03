@@ -12,13 +12,13 @@
 		<vm:MainViewModel />
 	</Design.DataContext>
 
-	<UniformGrid Rows="2" Columns="1">
+	<Grid RowDefinitions="* *">
 		<HeaderedContentControl Header="DataGrid">
 			<views:DataGridHistoryView DataContext="{Binding HistoryViewModel}" />
 		</HeaderedContentControl>
-        <HeaderedContentControl Header="TreeDataGrid">
+        <HeaderedContentControl Header="TreeDataGrid" Grid.Row="1">
             <views:TreeDataGridHistoryView DataContext="{Binding TreeDataGridHistoryViewModel}" />
         </HeaderedContentControl>
-	</UniformGrid>
+	</Grid>
 
 </UserControl>

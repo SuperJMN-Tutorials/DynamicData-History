@@ -13,7 +13,6 @@ public class SingleTransactionNode : TransactionNode
 {
     public SingleTransactionNode(TransactionModel transactionModel)
     {
-        Name = transactionModel.Name;
         Date = transactionModel.WhenAnyValue(x => x.Date).Select(offset => new HumanizedDateTimeOffset(offset));
         Amount = new BehaviorSubject<int>(transactionModel.Amount);
         IsConfirmed = transactionModel.WhenAnyValue(x => x.IsConfirmed, b => (bool?)b);

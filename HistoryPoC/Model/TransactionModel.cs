@@ -7,14 +7,11 @@ namespace HistoryPoC.Model;
 
 public class TransactionModel : ViewModelBase
 {
-    public TransactionModel(string name, int id, int? parentId)
+    public TransactionModel(int id, int? parentId)
     {
-        Name = name;
         Id = id;
         ParentId = parentId;
     }
-
-    public string Name { get; }
 
     public int Id { get; }
 
@@ -28,6 +25,4 @@ public class TransactionModel : ViewModelBase
 
     [Reactive]
     public bool IsConfirmed { get; set; }
-
-
 }

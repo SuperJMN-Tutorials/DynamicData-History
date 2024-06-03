@@ -19,10 +19,16 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
     {
         var blankColumn = new TemplateColumn<TransactionNode>("", new FuncDataTemplate<TransactionNode>((node, ns) => new TextBlock()));
 
+        var groupIdColumn = new TemplateColumn<TransactionNode>("GroupId", new MyTemplate<TransactionNode, TextBlock>(node => new TextBlock() { VerticalAlignment = VerticalAlignment.Center }, (node, block) =>
+        {
+            block.Text = node is TransactionGroupNode g ? g.Key.ToString() : "";
+        }));
+        
         var amountColumn = new TemplateColumn<TransactionNode>("Amount", new MyTemplate<TransactionNode, TextBlock>(node => new TextBlock() { VerticalAlignment = VerticalAlignment.Center }, (node, block) =>
         {
             block.Bind(TextBlock.TextProperty, node.Amount.Select(x => x.ToString()));
         }));
+        
         var dateColumn = new TemplateColumn<TransactionNode>("Date", new MyTemplate<TransactionNode, TextBlock>(node => new TextBlock() { VerticalAlignment = VerticalAlignment.Center }, (node, block) =>
         {
             block.Bind(TextBlock.TextProperty, node.Date.Select(x => x.ToString()));
@@ -44,7 +50,7 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
             view.Bind(ToggleButton.IsCheckedProperty, node.IsConfirmed);
         }));
 
-        var expanderColumn = new HierarchicalExpanderColumn<TransactionNode>(blankColumn, x => x.Children);
+        var expanderColumn = new HierarchicalExpanderColumn<TransactionNode>(blankColumn, x => x.Children, hasChildrenSelector: x => x.Children.Count > 1);
 
         var actions = new TemplateColumn<TransactionNode>("Actions", new FuncDataTemplate<TransactionNode>((node, ns) => new TextBlock()));
 
@@ -53,6 +59,7 @@ public class TreeDataGridTransactionHistoryViewModel : TransactionHistoryViewMod
             Columns =
             {
                 expanderColumn,
+                groupIdColumn,
                 confirmationColumn,
                 amountColumn,
                 dateColumn,

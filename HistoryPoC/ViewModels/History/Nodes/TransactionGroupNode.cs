@@ -8,7 +8,6 @@ using DynamicData;
 using DynamicData.Aggregation;
 using HistoryPoC.Helpers;
 using HistoryPoC.Model;
-using ReactiveUI;
 
 namespace HistoryPoC.ViewModels.History.Nodes;
 
@@ -16,10 +15,11 @@ public class TransactionGroupNode : TransactionNode, IDisposable
 {
     private readonly CompositeDisposable disposables = new();
     private readonly ReadOnlyObservableCollection<TransactionNode> children;
-    private readonly ObservableAsPropertyHelper<int> amount;
 
     public TransactionGroupNode(IGroup<TransactionModel, int, int> group)
     {
+        Key = group.Key;
+        
         var changeSet = group.Cache.Connect();
 
         var childrenChangeSet = changeSet
@@ -29,9 +29,6 @@ public class TransactionGroupNode : TransactionNode, IDisposable
             .Bind(out children)
             .Subscribe()
             .DisposeWith(disposables);
-
-        Name = group.Key.ToString();
-
 
         var sum = childrenChangeSet
             .TransformOnObservable(x => x.Amount)
@@ -69,6 +66,8 @@ public class TransactionGroupNode : TransactionNode, IDisposable
         Labels = new BehaviorSubject<IEnumerable<string>>(new List<string>(){"Sample", "Value"});
     }
 
+    public int Key { get; set; }
+
     public override ReadOnlyObservableCollection<TransactionNode> Children => children;
 
     public sealed override IObservable<int> Amount { get; }
@@ -80,6 +79,5 @@ public class TransactionGroupNode : TransactionNode, IDisposable
     public void Dispose()
     {
         disposables.Dispose();
-        amount.Dispose();
     }
 }

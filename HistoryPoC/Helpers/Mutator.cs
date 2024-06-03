@@ -27,7 +27,7 @@ public class Mutator
 
         sourceCache.PopulateFrom(Observable.Interval(TimeSpan.FromSeconds(5), RxApp.MainThreadScheduler).Select(n => new[]
             {
-                new TransactionModel("New", 6 + (int) n, 1)
+                new TransactionModel(Random.Shared.Next(), 1)
                 {
                     Date = DateTimeOffset.UtcNow
                 }
